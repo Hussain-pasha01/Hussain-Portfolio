@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import SectionWrapper from './SectionWrapper';
-import { Mail, Phone, MapPin, Send, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import { Mail, Phone, Send, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Contact: React.FC = () => {
@@ -75,7 +75,7 @@ const Contact: React.FC = () => {
     // Construct mailto link
     const subject = `Portfolio Contact from ${name}`;
     const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
-    const mailtoLink = `mailto:shaikhussainpasha1919@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailtoLink = `mailto:skrhp01@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     // Simulate processing delay for better UX
     setTimeout(() => {
@@ -131,7 +131,7 @@ const Contact: React.FC = () => {
             <h3 className="text-2xl font-bold text-white">Contact Information</h3>
             <p className="text-slate-400 leading-relaxed">
               I am currently available for freelance work or full-time opportunities. 
-              If you have a project that needs some creative touch, feel free to contact me.
+              I look forward to discussing how my skills and experience can contribute to your next professional venture.
             </p>
 
             <div className="space-y-6">
@@ -159,24 +159,9 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-white">Email</h4>
-                  <a href="mailto:shaikhussainpasha1919@gmail.com" className="text-slate-400 hover:text-white transition-colors break-all">
-                    shaikhussainpasha1919@gmail.com
+                  <a href="mailto:skrhp01@gmail.com" className="text-slate-400 hover:text-white transition-colors break-all">
+                    skrhp01@gmail.com
                   </a>
-                </div>
-              </motion.div>
-
-              <motion.div 
-                whileHover={{ x: 5 }}
-                className="flex items-start gap-4"
-              >
-                <div className="p-3 bg-slate-800/50 rounded-lg text-accent border border-accent/20">
-                  <MapPin size={24} />
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-white">Location</h4>
-                  <p className="text-slate-400">
-                    Visakhapatnam, Andhra Pradesh, 531162
-                  </p>
                 </div>
               </motion.div>
             </div>
@@ -244,7 +229,7 @@ const Contact: React.FC = () => {
                       ? 'border-red-500 focus:ring-red-500/50' 
                       : 'border-slate-700/50 focus:ring-accent focus:border-transparent'
                   }`}
-                  placeholder="Tell me about your project..."
+                  placeholder="Message here..."
                 ></textarea>
                 {errors.message && (
                   <p className="text-red-500 text-xs mt-1 flex items-center gap-1">

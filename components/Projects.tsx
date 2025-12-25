@@ -1,6 +1,6 @@
 import React from 'react';
 import SectionWrapper from './SectionWrapper';
-import { ExternalLink, Code2, Sparkles, Globe, Cpu, Github } from 'lucide-react';
+import { ExternalLink, Code2, Sparkles, Globe, Cpu, Github, Layout, Search } from 'lucide-react';
 import { Project } from '../types';
 import { motion } from 'framer-motion';
 
@@ -26,6 +26,28 @@ const projectsData: Project[] = [
       'SEO optimized',
       'Responsive design'
     ]
+  },
+  {
+    title: 'Aeologic Company Website',
+    description: 'Orchestrated the development and scaling of the primary corporate platform using Laravel. Implemented advanced SEO keyword strategies, optimized page load speeds, and engineered high-fidelity UI components for cross-device excellence.',
+    technologies: ['Laravel', 'PHP', 'MySQL', 'Bootstrap'],
+    role: 'Web Developer',
+    features: [
+      'Blade Template Engine',
+      'SEO Architecture',
+      'UI/UX Optimization'
+    ]
+  },
+  {
+    title: 'Track and Trace Website',
+    description: 'Architected a dynamic logistics monitoring interface powered by the Laravel ecosystem. Focused on real-time data flow, optimized search ranking through structured keyword data, and automated communication pipelines.',
+    technologies: ['Laravel', 'PHP', 'MySQL', 'JavaScript'],
+    role: 'Web Developer',
+    features: [
+      'Eloquent Relations',
+      'Dynamic Tracking Flow',
+      'Functional Testing'
+    ]
   }
 ];
 
@@ -49,7 +71,7 @@ const Projects: React.FC = () => {
             </h2>
             <div className="h-1.5 w-16 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mb-6"></div>
             <p className="text-slate-400 text-lg max-w-xl mx-auto font-medium opacity-80">
-              Showcasing my technical implementations and engineering solutions.
+              Showcasing my technical implementations and professional engineering solutions.
             </p>
           </motion.div>
         </div>
@@ -61,7 +83,7 @@ const Projects: React.FC = () => {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
+              transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
               whileHover={{ y: -8 }}
               className="group relative h-full"
             >
@@ -72,17 +94,20 @@ const Projects: React.FC = () => {
               <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800/60 rounded-xl overflow-hidden h-full flex flex-col transition-all duration-300 group-hover:border-primary/40 group-hover:bg-slate-900/60 shadow-2xl shadow-black/50">
                 
                 {/* Visual Header / Card Top */}
-                <div className="h-2 w-full bg-gradient-to-r from-primary/50 via-secondary/50 to-accent/50 opacity-30 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className={`h-2 w-full bg-gradient-to-r ${index % 2 === 0 ? 'from-primary via-secondary to-accent' : 'from-accent via-primary to-secondary'} opacity-30 group-hover:opacity-100 transition-opacity duration-500`}></div>
 
                 <div className="p-7 flex flex-col flex-1">
                   {/* Icon and Title Header */}
                   <div className="flex justify-between items-start mb-6">
                     <div className="flex items-center gap-4">
-                      <div className={`p-3 rounded-lg ${index === 0 ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'} border border-white/5 transition-transform duration-500 group-hover:scale-110 shadow-inner`}>
-                        {index === 0 ? <Cpu size={22} strokeWidth={1.5} /> : <Globe size={22} strokeWidth={1.5} />}
+                      <div className={`p-3 rounded-lg ${index % 2 === 0 ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'} border border-white/5 transition-transform duration-500 group-hover:scale-110 shadow-inner`}>
+                        {index === 0 && <Cpu size={22} strokeWidth={1.5} />}
+                        {index === 1 && <Globe size={22} strokeWidth={1.5} />}
+                        {index === 2 && <Layout size={22} strokeWidth={1.5} />}
+                        {index === 3 && <Search size={22} strokeWidth={1.5} />}
                       </div>
                       <div>
-                        <h3 className="text-2xl font-bold text-white group-hover:text-primary transition-colors duration-300 tracking-tight">
+                        <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-primary transition-colors duration-300 tracking-tight">
                           {project.title}
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
@@ -105,7 +130,7 @@ const Projects: React.FC = () => {
                   </div>
 
                   {/* Body Text */}
-                  <p className="text-slate-400 text-sm leading-relaxed mb-8 font-medium line-clamp-3">
+                  <p className="text-slate-400 text-sm leading-relaxed mb-8 font-medium line-clamp-4">
                     {project.description}
                   </p>
 

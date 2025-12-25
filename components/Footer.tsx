@@ -18,14 +18,14 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="flex gap-6">
-            <a 
+            {/* <a 
               href="https://github.com/Runhussain" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-slate-400 hover:text-white transition-colors hover:-translate-y-1 transform duration-300 hover:text-primary"
             >
               <Github size={24} />
-            </a>
+            </a> */}
             <a 
               href="https://www.linkedin.com/in/runhussain-pasha-shaik" 
               target="_blank" 
@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
               <Linkedin size={24} />
             </a>
             <a 
-              href="mailto:shaikhussainpasha1919@gmail.com" 
+              href="#contact" 
               className="text-slate-400 hover:text-white transition-colors hover:-translate-y-1 transform duration-300 hover:text-accent"
             >
               <Mail size={24} />
@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-900 text-center text-slate-500 text-sm flex flex-col items-center gap-2">
-          <p>&copy; {new Date().getFullYear()} Runhussain Pasha Shaik. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Shaik Runhussain Pasha. All rights reserved.</p>
           <p className="flex items-center gap-1">
             Made with <Heart size={14} className="text-secondary fill-secondary" />
           </p>

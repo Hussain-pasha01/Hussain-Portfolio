@@ -19,7 +19,9 @@ Runhussain's Profile Summary:
 - Key Projects: 
   1. Event Management System (Full Stack PHP/Laravel) with role-based access and real-time tracking.
   2. Digital Portfolio V2 (React/TypeScript/Framer Motion).
-- Contact Info: Visakhapatnam, Andhra Pradesh. Phone: +91 9848595811. Email: shaikhussainpasha1919@gmail.com.
+  3. Aeologic Company Website (Laravel-based corporate platform).
+  4. Track and Trace Website (Logistics monitoring system powered by Laravel).
+- Contact Info: Visakhapatnam, Andhra Pradesh. Phone: +91 9848595811. Email: skrhp01@gmail.com.
 - Professional Traits: Problem-solver, motivated, eager to build scalable applications.
 
 Rules for Interaction:

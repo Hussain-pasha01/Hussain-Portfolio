@@ -10,23 +10,23 @@ const experiences: ExperienceType[] = [
     company: "Aeologic Technologies",
     duration: "July 2025 – Present",
     description: [
-      "Promoted to full-time role following a successful internship period.",
+      "Promoted to full-time role following a successful tenure as a Web Developer.",
       "Developing and maintaining large-scale web applications using Laravel and modern PHP.",
       "Collaborating with cross-functional teams to deliver high-quality software solutions.",
       "Optimizing database performance and ensuring code scalability."
     ]
   },
   {
-    role: "Web Developer Intern",
+    role: "Web Developer",
     company: "Aeologic Technologies",
     duration: "April 2025 – July 2025 (3 Months)",
     description: [
-      "Worked on full-stack web development projects using both custom code and frameworks.",
+      "Contributed to full-stack web development projects using the Laravel framework.",
       "Developed responsive user interfaces using HTML, CSS, JavaScript, and Bootstrap.",
-      "Built dynamic backend functionalities using PHP and Laravel framework.",
-      "Gained hands-on experience in WordPress theme customization and plugin integration.",
-      "Implemented and managed MySQL databases for data storage and retrieval.",
-      "Used Git and GitHub for version control and collaborative development."
+      "Built dynamic backend functionalities and integrated complex database structures.",
+      "Gained hands-on experience in WordPress theme customization and professional plugin development.",
+      "Implemented and managed MySQL databases for robust data storage and retrieval.",
+      "Used Git and GitHub for enterprise-level version control and collaborative workflows."
     ]
   }
 ];
