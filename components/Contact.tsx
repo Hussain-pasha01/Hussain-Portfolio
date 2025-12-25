@@ -1,7 +1,19 @@
 import React, { useState } from 'react';
 import SectionWrapper from './SectionWrapper';
-import { Mail, Phone, Send, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Mail, Phone, Send, CheckCircle, Loader2, AlertCircle, XCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+/**
+ * EMAILJS CONFIGURATION
+ * 1. Sign up at https://www.emailjs.com/
+ * 2. Create a Service and a Template.
+ * 3. Replace the placeholders below with your actual keys.
+ */
+const EMAILJS_CONFIG = {
+  SERVICE_ID: 'service_4ybw2ka', // e.g., 'service_abc123'
+  TEMPLATE_ID: 'template_a1nikrv', // e.g., 'template_xyz456'
+  PUBLIC_KEY: 'a-2LmZBc3tZcfuF2I', // e.g., 'user_7890qwerty'
+};
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -14,13 +26,13 @@ const Contact: React.FC = () => {
     email: '',
     message: ''
   });
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const validateForm = () => {
     let isValid = true;
     const newErrors = { name: '', email: '', message: '' };
 
-    // Name validation
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
       isValid = false;
@@ -29,7 +41,6 @@ const Contact: React.FC = () => {
       isValid = false;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
@@ -39,7 +50,6 @@ const Contact: React.FC = () => {
       isValid = false;
     }
 
-    // Message validation
     if (!formData.message.trim()) {
       newErrors.message = 'Message is required';
       isValid = false;
@@ -55,41 +65,58 @@ const Contact: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (errors[name as keyof typeof errors]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
+    if (status === 'error') setStatus('idle');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+    if (!validateForm()) return;
+
+    // Check if keys are set
+    if (EMAILJS_CONFIG.SERVICE_ID === 'YOUR_SERVICE_ID') {
+      setStatus('error');
+      setErrorMessage('EmailJS is not configured. Please add your keys in Contact.tsx.');
       return;
     }
 
     setStatus('submitting');
     
-    const { name, email, message } = formData;
-    
-    // Construct mailto link
-    const subject = `Portfolio Contact from ${name}`;
-    const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
-    const mailtoLink = `mailto:skrhp01@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const payload = {
+      service_id: EMAILJS_CONFIG.SERVICE_ID,
+      template_id: EMAILJS_CONFIG.TEMPLATE_ID,
+      user_id: EMAILJS_CONFIG.PUBLIC_KEY,
+      template_params: {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        to_name: 'Shaik RunHussain Pasha',
+      },
+    };
 
-    // Simulate processing delay for better UX
-    setTimeout(() => {
-      // Open email client
-      window.location.href = mailtoLink;
-      
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-      
-      // Reset status after 5 seconds
-      setTimeout(() => {
-        setStatus('idle');
-      }, 5000);
-    }, 1000);
+    try {
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      setStatus('error');
+      setErrorMessage('Failed to send message. Please try again or contact via phone.');
+    }
   };
 
   return (
@@ -97,19 +124,12 @@ const Contact: React.FC = () => {
       {/* Animated Background */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         <motion.div 
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           className="absolute -bottom-20 -left-20 w-96 h-96 bg-primary/10 rounded-full blur-[80px]"
         />
         <motion.div 
-          animate={{ 
-            x: [0, 50, 0],
-            y: [0, -50, 0],
-            opacity: [0.2, 0.4, 0.2],
-          }}
+          animate={{ x: [0, 50, 0], y: [0, -50, 0], opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-40 right-10 w-72 h-72 bg-secondary/10 rounded-full blur-[60px]"
         />
@@ -125,7 +145,6 @@ const Contact: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
-          
           {/* Contact Info */}
           <div className="space-y-8">
             <h3 className="text-2xl font-bold text-white">Contact Information</h3>
@@ -135,10 +154,7 @@ const Contact: React.FC = () => {
             </p>
 
             <div className="space-y-6">
-              <motion.div 
-                whileHover={{ x: 5 }}
-                className="flex items-start gap-4"
-              >
+              <motion.div whileHover={{ x: 5 }} className="flex items-start gap-4">
                 <div className="p-3 bg-slate-800/50 rounded-lg text-primary border border-primary/20">
                   <Phone size={24} />
                 </div>
@@ -150,10 +166,7 @@ const Contact: React.FC = () => {
                 </div>
               </motion.div>
 
-              <motion.div 
-                whileHover={{ x: 5 }}
-                className="flex items-start gap-4"
-              >
+              <motion.div whileHover={{ x: 5 }} className="flex items-start gap-4">
                 <div className="p-3 bg-slate-800/50 rounded-lg text-secondary border border-secondary/20">
                   <Mail size={24} />
                 </div>
@@ -172,6 +185,20 @@ const Contact: React.FC = () => {
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-primary/20 to-transparent rounded-tr-2xl"></div>
             
             <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+              <AnimatePresence>
+                {status === 'error' && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-sm flex items-center gap-2 mb-4"
+                  >
+                    <XCircle size={18} />
+                    {errorMessage}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">Your Name</label>
                 <input
@@ -180,7 +207,8 @@ const Contact: React.FC = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg focus:ring-2 outline-none text-white transition-all placeholder:text-slate-600 ${
+                  disabled={status === 'submitting' || status === 'success'}
+                  className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg focus:ring-2 outline-none text-white transition-all placeholder:text-slate-600 disabled:opacity-50 ${
                     errors.name 
                       ? 'border-red-500 focus:ring-red-500/50' 
                       : 'border-slate-700/50 focus:ring-primary focus:border-transparent'
@@ -202,7 +230,8 @@ const Contact: React.FC = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg focus:ring-2 outline-none text-white transition-all placeholder:text-slate-600 ${
+                  disabled={status === 'submitting' || status === 'success'}
+                  className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg focus:ring-2 outline-none text-white transition-all placeholder:text-slate-600 disabled:opacity-50 ${
                     errors.email 
                       ? 'border-red-500 focus:ring-red-500/50' 
                       : 'border-slate-700/50 focus:ring-secondary focus:border-transparent'
@@ -224,7 +253,8 @@ const Contact: React.FC = () => {
                   rows={4}
                   value={formData.message}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg focus:ring-2 outline-none text-white transition-all resize-none placeholder:text-slate-600 ${
+                  disabled={status === 'submitting' || status === 'success'}
+                  className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg focus:ring-2 outline-none text-white transition-all resize-none placeholder:text-slate-600 disabled:opacity-50 ${
                     errors.message 
                       ? 'border-red-500 focus:ring-red-500/50' 
                       : 'border-slate-700/50 focus:ring-accent focus:border-transparent'
@@ -249,11 +279,11 @@ const Contact: React.FC = () => {
               >
                 {status === 'submitting' ? (
                   <>
-                    <Loader2 className="animate-spin" size={20} /> Opening Mail Client...
+                    <Loader2 className="animate-spin" size={20} /> Sending Message...
                   </>
                 ) : status === 'success' ? (
                   <>
-                    <CheckCircle size={20} /> Sent!
+                    <CheckCircle size={20} /> Message Sent!
                   </>
                 ) : (
                   <>

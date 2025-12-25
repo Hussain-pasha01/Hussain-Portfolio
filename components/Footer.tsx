@@ -1,5 +1,6 @@
 import React from 'react';
 import { Github, Linkedin, Mail, Heart } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Footer: React.FC = () => {
   return (
@@ -17,36 +18,57 @@ const Footer: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex gap-6">
-            {/* <a 
+          <div className="flex gap-4 sm:gap-6">
+            {/* GitHub Link */}
+            <motion.a 
               href="https://github.com/Runhussain" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-slate-400 hover:text-white transition-colors hover:-translate-y-1 transform duration-300 hover:text-primary"
+              whileHover={{ y: -5, scale: 1.15 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative p-3 text-slate-400 hover:text-primary transition-colors duration-300"
             >
-              <Github size={24} />
-            </a> */}
-            <a 
+              <div className="absolute inset-0 bg-primary/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Github size={24} className="relative z-10" />
+            </motion.a>
+
+            {/* LinkedIn Link */}
+            <motion.a 
               href="https://www.linkedin.com/in/runhussain-pasha-shaik" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-slate-400 hover:text-white transition-colors hover:-translate-y-1 transform duration-300 hover:text-secondary"
+              whileHover={{ y: -5, scale: 1.15 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative p-3 text-slate-400 hover:text-secondary transition-colors duration-300"
             >
-              <Linkedin size={24} />
-            </a>
-            <a 
-              href="#contact" 
-              className="text-slate-400 hover:text-white transition-colors hover:-translate-y-1 transform duration-300 hover:text-accent"
+              <div className="absolute inset-0 bg-secondary/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Linkedin size={24} className="relative z-10" />
+            </motion.a>
+
+            {/* Mail Link */}
+            <motion.a 
+              href="mailto:skrhp01@gmail.com" 
+              whileHover={{ y: -5, scale: 1.15 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative p-3 text-slate-400 hover:text-accent transition-colors duration-300"
             >
-              <Mail size={24} />
-            </a>
+              <div className="absolute inset-0 bg-accent/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Mail size={24} className="relative z-10" />
+            </motion.a>
           </div>
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-900 text-center text-slate-500 text-sm flex flex-col items-center gap-2">
           <p>&copy; {new Date().getFullYear()} Shaik RunHussain Pasha. All rights reserved.</p>
-          <p className="flex items-center gap-1">
-            Made with <Heart size={14} className="text-secondary fill-secondary" />
+          <p className="flex items-center gap-1.5">
+            Made with 
+            <motion.span
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="inline-block"
+            >
+              <Heart size={14} className="text-secondary fill-secondary" />
+            </motion.span>
           </p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Palette, X, Check } from 'lucide-react';
+import { Palette, X } from 'lucide-react';
 
 interface Theme {
   name: string;
@@ -44,68 +44,100 @@ const ThemePicker: React.FC = () => {
 
   return (
     <div ref={containerRef} className="relative flex items-center justify-center">
-      {/* Mini Toggle Button */}
+      {/* Theme Trigger Button */}
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className={`relative w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 border ${
+        className={`relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 border ${
           isOpen 
-          ? 'bg-slate-800 border-primary text-primary shadow-[0_0_10px_rgba(var(--color-primary),0.3)]' 
+          ? 'bg-slate-800 border-primary/50 text-primary shadow-[0_0_15px_rgba(var(--color-primary),0.2)]' 
           : 'bg-slate-900/40 border-slate-800/60 text-slate-400 hover:text-white hover:border-slate-700'
         }`}
-        title="Themes"
+        title="Change Portfolio Theme"
       >
-        {isOpen ? <X size={16} /> : <Palette size={16} />}
+        <AnimatePresence mode="wait">
+          {isOpen ? (
+            <motion.div
+              key="close"
+              initial={{ rotate: -90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: 90, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <X size={20} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="palette"
+              initial={{ rotate: 90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: -90, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Palette size={20} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.button>
 
-      {/* Enhanced Theme Grid Overlay */}
+      {/* Theme Selection Dropdown - Simplified "Only Color" Grid */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 10 }}
-            className="absolute top-12 right-0 bg-slate-900/98 backdrop-blur-2xl border border-slate-800 rounded-2xl shadow-2xl p-4 z-[100] min-w-[200px]"
+            className="absolute top-14 right-0 bg-slate-900/95 backdrop-blur-2xl border border-slate-800 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-4 z-[100] min-w-[160px]"
           >
-            <div className="flex items-center justify-between mb-4 px-1">
-              <span className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Select Visual Theme</span>
-              <div className="w-1 h-1 rounded-full bg-primary animate-pulse"></div>
+            <div className="mb-3 text-center">
+              <span className="text-[9px] font-black uppercase text-slate-500 tracking-[0.2em]">Select Theme</span>
             </div>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               {themes.map((theme) => (
                 <button
                   key={theme.name}
                   onClick={() => applyTheme(theme)}
-                  className={`group relative flex flex-col items-center gap-2 p-2 rounded-xl transition-all duration-300 border ${
-                    activeTheme === theme.name 
-                    ? 'bg-white/5 border-white/10 ring-1 ring-white/10' 
-                    : 'bg-transparent border-transparent hover:bg-white/5'
-                  }`}
+                  className="group relative flex flex-col items-center justify-center p-1 rounded-full transition-all duration-300"
+                  title={theme.name}
                 >
-                  {/* Color Preview Swatch */}
+                  {/* Outer selection ring */}
+                  <AnimatePresence>
+                    {activeTheme === theme.name && (
+                      <motion.div 
+                        layoutId="active-ring"
+                        className="absolute inset-0 border-2 border-white rounded-full z-0"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      />
+                    )}
+                  </AnimatePresence>
+
+                  {/* Color Circle */}
                   <div 
-                    className={`relative w-full h-10 rounded-lg shadow-sm transition-transform duration-300 flex items-center justify-center overflow-hidden ${activeTheme === theme.name ? 'scale-105 shadow-lg' : 'group-hover:scale-105'}`}
+                    className={`relative w-8 h-8 rounded-full shadow-lg transition-transform duration-500 z-10 ${
+                      activeTheme === theme.name ? 'scale-75' : 'group-hover:scale-110'
+                    }`}
                     style={{ 
                       background: `linear-gradient(135deg, rgb(${theme.primary}), rgb(${theme.secondary}))` 
                     }}
                   >
-                    {activeTheme === theme.name && (
-                      <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] flex items-center justify-center">
-                        <Check size={16} className="text-white drop-shadow-md" />
-                      </div>
-                    )}
-                    {/* Interior glow for depth */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
+                    {/* Inner highlight for premium feel */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent rounded-full opacity-60"></div>
                   </div>
-                  
-                  {/* Label */}
-                  <span className={`text-[10px] font-bold tracking-tight transition-colors ${activeTheme === theme.name ? 'text-primary' : 'text-slate-400 group-hover:text-slate-200'}`}>
-                    {theme.name}
-                  </span>
                 </button>
               ))}
+            </div>
+            
+            <div className="mt-3 pt-3 border-t border-slate-800/50 flex flex-col items-center">
+              <div className="flex gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary/30"></div>
+                <div className="w-1.5 h-1.5 rounded-full bg-secondary/30"></div>
+                <div className="w-1.5 h-1.5 rounded-full bg-accent/30"></div>
+              </div>
             </div>
           </motion.div>
         )}
