@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -29,7 +29,10 @@ const Navbar: React.FC = () => {
     e.preventDefault();
     const targetElement = document.querySelector(href);
     if (targetElement) {
-      const offset = 100;
+      // Optimized offset for mobile vs desktop
+      const isMobile = window.innerWidth < 768;
+      const offset = isMobile ? 80 : 100;
+      
       const elementPosition = targetElement.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - offset;
 
@@ -42,14 +45,14 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-dark/90 backdrop-blur-md shadow-lg py-3 border-b border-slate-800/50' : 'bg-transparent py-5'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 transform-gpu ${scrolled ? 'bg-dark/90 backdrop-blur-md shadow-lg py-3 border-b border-slate-800/50' : 'bg-transparent py-5'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <a href="#" onClick={(e) => handleNavClick(e, '#home')} className="flex items-center gap-3 group">
               <Logo className="w-10 h-10" />
               <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400 hidden sm:block tracking-tighter">
-                RUNHUSSAIN
+                SHAIK RUNHUSSAIN
               </span>
             </a>
           </div>
@@ -88,6 +91,7 @@ const Navbar: React.FC = () => {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-slate-300 hover:text-white focus:outline-none p-2 rounded-lg bg-slate-800/40"
+              aria-label="Toggle Menu"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -96,7 +100,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden absolute w-full bg-dark/95 backdrop-blur-xl border-b border-slate-800 transition-all duration-300 ease-in-out ${isOpen ? 'opacity-100 max-h-screen' : 'opacity-0 max-h-0 overflow-hidden'}`}>
+      <div className={`md:hidden absolute w-full bg-dark/95 backdrop-blur-xl border-b border-slate-800 transition-all duration-300 ease-in-out transform-gpu ${isOpen ? 'opacity-100 max-h-screen translate-y-0' : 'opacity-0 max-h-0 overflow-hidden -translate-y-4'}`}>
         <div className="px-6 pt-4 pb-8 space-y-2">
           {navLinks.map((link) => (
             <a

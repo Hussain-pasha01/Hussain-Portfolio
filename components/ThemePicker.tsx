@@ -59,36 +59,49 @@ const ThemePicker: React.FC = () => {
         {isOpen ? <X size={16} /> : <Palette size={16} />}
       </motion.button>
 
-      {/* Tiny Compact Color Grid */}
+      {/* Enhanced Theme Grid Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 5 }}
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 5 }}
-            className="absolute top-12 right-0 bg-slate-900/95 backdrop-blur-xl border border-slate-800/80 rounded-xl shadow-2xl p-2.5 z-[100] min-w-[110px]"
+            exit={{ opacity: 0, scale: 0.9, y: 10 }}
+            className="absolute top-12 right-0 bg-slate-900/98 backdrop-blur-2xl border border-slate-800 rounded-2xl shadow-2xl p-4 z-[100] min-w-[200px]"
           >
-            <div className="grid grid-cols-3 gap-2">
+            <div className="flex items-center justify-between mb-4 px-1">
+              <span className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Select Visual Theme</span>
+              <div className="w-1 h-1 rounded-full bg-primary animate-pulse"></div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
               {themes.map((theme) => (
                 <button
                   key={theme.name}
                   onClick={() => applyTheme(theme)}
-                  title={theme.name}
-                  className={`group relative w-7 h-7 rounded-md transition-all duration-300 flex items-center justify-center border-2 ${
+                  className={`group relative flex flex-col items-center gap-2 p-2 rounded-xl transition-all duration-300 border ${
                     activeTheme === theme.name 
-                    ? 'border-white/80 scale-110 shadow-[0_0_8px_rgba(255,255,255,0.2)]' 
-                    : 'border-transparent hover:border-white/20'
+                    ? 'bg-white/5 border-white/10 ring-1 ring-white/10' 
+                    : 'bg-transparent border-transparent hover:bg-white/5'
                   }`}
-                  style={{ 
-                    background: `linear-gradient(135deg, rgb(${theme.primary}), rgb(${theme.secondary}))` 
-                  }}
                 >
-                  {activeTheme === theme.name && (
-                    <Check size={12} className="text-white drop-shadow-md" />
-                  )}
+                  {/* Color Preview Swatch */}
+                  <div 
+                    className={`relative w-full h-10 rounded-lg shadow-sm transition-transform duration-300 flex items-center justify-center overflow-hidden ${activeTheme === theme.name ? 'scale-105 shadow-lg' : 'group-hover:scale-105'}`}
+                    style={{ 
+                      background: `linear-gradient(135deg, rgb(${theme.primary}), rgb(${theme.secondary}))` 
+                    }}
+                  >
+                    {activeTheme === theme.name && (
+                      <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] flex items-center justify-center">
+                        <Check size={16} className="text-white drop-shadow-md" />
+                      </div>
+                    )}
+                    {/* Interior glow for depth */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
+                  </div>
                   
-                  {/* Tooltip for name */}
-                  <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition-transform bg-slate-950 text-white text-[9px] font-bold py-0.5 px-1.5 rounded border border-white/10 whitespace-nowrap z-[110] pointer-events-none">
+                  {/* Label */}
+                  <span className={`text-[10px] font-bold tracking-tight transition-colors ${activeTheme === theme.name ? 'text-primary' : 'text-slate-400 group-hover:text-slate-200'}`}>
                     {theme.name}
                   </span>
                 </button>

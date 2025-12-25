@@ -229,7 +229,7 @@ const Contact: React.FC = () => {
                       ? 'border-red-500 focus:ring-red-500/50' 
                       : 'border-slate-700/50 focus:ring-accent focus:border-transparent'
                   }`}
-                  placeholder="Message here..."
+                  placeholder="Tell me about your project..."
                 ></textarea>
                 {errors.message && (
                   <p className="text-red-500 text-xs mt-1 flex items-center gap-1">

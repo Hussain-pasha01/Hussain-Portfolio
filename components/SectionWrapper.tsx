@@ -9,22 +9,22 @@ interface Props {
 }
 
 /**
- * SectionWrapper adds a smooth slide-and-fade animation.
- * viewport={{ once: false }} ensures the animation triggers every time 
- * the section enters the view (scrolling top to bottom or bottom to top).
+ * SectionWrapper adds a smooth slide-and-fade animation with GPU optimization.
+ * This version is tuned for performance to ensure glitch-free scrolling on mobile and tablet.
  */
 const SectionWrapper: React.FC<Props> = ({ children, id, className = "", delay = 0 }) => {
   return (
-    <section id={id} className={`py-12 md:py-24 ${className}`}>
+    <section id={id} className={`py-12 md:py-24 transform-gpu ${className}`}>
       <motion.div
-        initial={{ opacity: 0, y: 50, scale: 0.95 }}
+        initial={{ opacity: 0, y: 30, scale: 0.98 }}
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
-        viewport={{ once: false, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.1 }}
         transition={{ 
-          duration: 0.8, 
+          duration: 0.5, 
           delay: delay, 
-          ease: [0.22, 1, 0.36, 1] 
+          ease: [0.25, 1, 0.5, 1] 
         }}
+        className="will-change-transform transform-gpu"
       >
         {children}
       </motion.div>

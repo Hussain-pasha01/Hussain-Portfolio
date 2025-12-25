@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 
 /**
  * List of roles displayed in the typewriter effect.
- * Change these strings to update your professional titles.
  */
 const roles = [
   "Full Stack Developer",
@@ -27,13 +26,12 @@ const Hero: React.FC = () => {
     const i = roleIndex % roles.length;
     const fullText = roles[i];
     
-    // Typing speed logic
     let speed = isDeleting ? 50 : 100;
 
     if (!isDeleting && text === fullText) {
-      speed = 2000; // Pause at the end of the word
+      speed = 2000;
     } else if (isDeleting && text === '') {
-      speed = 500; // Pause before starting a new word
+      speed = 500;
     }
 
     const timer = setTimeout(() => {
@@ -62,7 +60,6 @@ const Hero: React.FC = () => {
     canvas.width = width;
     canvas.height = height;
 
-    // Helper: Gets colors from the custom CSS variables defined in index.html
     const getThemeColors = () => {
       const rootStyle = getComputedStyle(document.documentElement);
       const p = rootStyle.getPropertyValue('--color-primary').trim().replace(/ /g, ',');
@@ -93,16 +90,13 @@ const Hero: React.FC = () => {
       };
     };
 
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('themeChanged', () => {
       themeColors = getThemeColors();
       initParticles(); 
     });
 
-    /**
-     * Particle Class: Represents a single dot on the screen
-     */
     class Particle {
       x: number; y: number; vx: number; vy: number;
       size: number; color: string;
@@ -120,7 +114,6 @@ const Hero: React.FC = () => {
       }
 
       update() {
-        // Interaction with mouse position
         const dx = mouseRef.current.x - this.x;
         const dy = mouseRef.current.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -132,23 +125,22 @@ const Hero: React.FC = () => {
             const directionY = dy / distance;
             
             if (distance > 60) {
-                this.vx += directionX * force * 0.5; // Attraction
+                this.vx += directionX * force * 0.5;
                 this.vy += directionY * force * 0.5;
             } else {
-                this.vx -= directionX * 1.2; // Repulsion
+                this.vx -= directionX * 1.2;
                 this.vy -= directionY * 1.2;
             }
         }
 
-        this.vx *= 0.96; // Friction to slow down movement
+        this.vx *= 0.96;
         this.vy *= 0.96;
-        this.vx += (this.baseSpeedX - this.vx) * 0.02; // Return to original drift
+        this.vx += (this.baseSpeedX - this.vx) * 0.02;
         this.vy += (this.baseSpeedY - this.vy) * 0.02;
 
         this.x += this.vx;
         this.y += this.vy;
 
-        // Wrap around screen edges
         if (this.x < 0) this.x = width;
         if (this.x > width) this.x = 0;
         if (this.y < 0) this.y = height;
@@ -167,7 +159,10 @@ const Hero: React.FC = () => {
     let particles: Particle[] = [];
     const initParticles = () => {
         particles = [];
-        const particleCount = Math.min(Math.floor(width / 10), 160);
+        // Even more optimized count for mobile/tablet scroll stability
+        const isMobile = width < 768;
+        const isTablet = width >= 768 && width < 1024;
+        const particleCount = isMobile ? 40 : (isTablet ? 80 : 160);
         for (let i = 0; i < particleCount; i++) {
             particles.push(new Particle());
         }
@@ -180,16 +175,15 @@ const Hero: React.FC = () => {
       ctx.clearRect(0, 0, width, height);
 
       for (let i = 0; i < particles.length; i++) {
-        // Draw connections between dots
         for (let j = i + 1; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
             const dy = particles[i].y - particles[j].y;
             const distance = Math.sqrt(dx*dx + dy*dy);
             
-            if (distance < 120) {
+            if (distance < 100) {
                 ctx.beginPath();
-                const opacity = 1 - (distance / 120);
-                ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.1})`;
+                const opacity = 1 - (distance / 100);
+                ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.06})`;
                 ctx.lineWidth = 0.5;
                 ctx.moveTo(particles[i].x, particles[i].y);
                 ctx.lineTo(particles[j].x, particles[j].y);
@@ -213,33 +207,34 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative bg-slate-950 overflow-hidden pt-20">
+    <section id="home" className="min-h-screen flex items-center justify-center relative bg-slate-950 overflow-hidden pt-20 transform-gpu will-change-transform">
       
-      {/* Background Lighting Decorations */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Background Lighting Decorations - Layered for depth with GPU hints */}
+      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu">
          <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-[#0f172a] to-slate-950"></div>
          <motion.div 
-            animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.2, 0.1] }}
-            transition={{ duration: 10, repeat: Infinity }}
-            className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-primary/20 rounded-full blur-[120px]"
+            animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.15, 0.1] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+            className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] bg-primary/10 rounded-full blur-[140px] will-change-transform transform-gpu"
          />
          <motion.div 
-            animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.3, 0.1] }}
-            transition={{ duration: 15, repeat: Infinity }}
-            className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-secondary/20 rounded-full blur-[120px]"
+            animate={{ scale: [1.1, 1, 1.1], opacity: [0.1, 0.2, 0.1] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-[-10%] right-[-10%] w-[70vw] h-[70vw] bg-secondary/10 rounded-full blur-[140px] will-change-transform transform-gpu"
          />
       </div>
 
-      <canvas ref={canvasRef} className="absolute inset-0 z-1 pointer-events-none w-full h-full opacity-60" />
+      <canvas ref={canvasRef} className="absolute inset-0 z-1 pointer-events-none w-full h-full opacity-60 transform-gpu" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12 lg:gap-20">
           
           <div className="flex-1 text-center md:text-left space-y-8">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="will-change-transform transform-gpu"
             >
               <h1 className="font-extrabold text-white leading-tight">
                 <span className="text-xl md:text-2xl block mb-4 text-slate-400 font-medium tracking-wide">Hello, I'm</span>
@@ -266,7 +261,7 @@ const Hero: React.FC = () => {
                 Hire Me
               </motion.a>
               <motion.a 
-                href="/RunHussain_CV.pdf"
+                href="/ShaikRunHussain_CV.pdf"
                 download
                 whileHover={{ scale: 1.05, borderColor: "rgb(var(--color-primary))" }}
                 whileTap={{ scale: 0.95 }}
@@ -278,20 +273,20 @@ const Hero: React.FC = () => {
           </div>
 
           <motion.div 
-             initial={{ opacity: 0, scale: 0.8 }}
+             initial={{ opacity: 0, scale: 0.9 }}
              animate={{ opacity: 1, scale: 1 }}
-             transition={{ duration: 1.2, ease: "easeOut" }}
-             className="relative flex-1 max-w-sm sm:max-w-md lg:max-w-lg"
+             transition={{ duration: 1, ease: "easeOut" }}
+             className="relative flex-1 max-w-[280px] sm:max-w-md lg:max-w-lg will-change-transform transform-gpu"
           >
              <div className="relative z-10 w-full aspect-square p-2">
-                <div className="absolute inset-[-15%] rounded-full border-2 border-primary/20 animate-spin-slow" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-primary via-secondary to-accent rounded-full opacity-20 blur-3xl animate-pulse" />
+                <div className="absolute inset-[-6%] rounded-full border border-primary/30 animate-spin-slow pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary via-secondary to-accent rounded-full opacity-20 blur-3xl animate-pulse pointer-events-none" />
                 
-                <div className="w-full h-full rounded-full overflow-hidden border-[6px] border-slate-800 shadow-2xl relative bg-slate-900 group">
+                <div className="w-full h-full rounded-full overflow-hidden border-2 border-slate-800 shadow-2xl relative bg-slate-900 group transform-gpu">
                    <img 
-                    src="https://unsplash.com/photos/B_jLTqC4eoE" 
-                    alt="RunHussain Pasha Shaik" 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    src="https://images.unsplash.com/photo-1724492723326-9f4a0a544b60?q=80&w=1000&auto=format&fit=crop" 
+                    alt="Shaik RunHussain Pasha" 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 will-change-transform transform-gpu"
                    />
                 </div>
              </div>

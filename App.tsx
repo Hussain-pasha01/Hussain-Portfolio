@@ -10,16 +10,16 @@ import Footer from './components/Footer';
 
 /**
  * Main Application Entry
- * All AI Assistant components have been removed to optimize performance and readability.
+ * AIAssistant has been completely removed to optimize performance and scrolling.
  */
 const App: React.FC = () => {
   return (
-    <div className="bg-slate-950 min-h-screen selection:bg-primary selection:text-white">
+    <div className="bg-slate-950 min-h-screen selection:bg-primary selection:text-white overflow-x-hidden">
       {/* Navigation */}
       <Navbar />
       
       {/* Sectioned Content */}
-      <main>
+      <main className="transform-gpu">
         <Hero />
         <About />
         <Skills />

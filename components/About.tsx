@@ -40,75 +40,90 @@ const About: React.FC = () => {
           className="absolute -top-20 -right-20 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px]"
         />
         <motion.div 
-          animate={{ y: [0, -20, 0], opacity: [0.1, 0.3, 0.1] }}
+          animate={{ y: [0, -20, 0], opacity: [0.1, 0.2, 0.1] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-1/3 left-10 w-20 h-20 bg-secondary/10 rounded-full blur-xl"
-        />
-        <motion.div 
-          animate={{ y: [0, 20, 0], opacity: [0.1, 0.3, 0.1] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-20 right-1/4 w-32 h-32 bg-accent/5 rounded-full blur-xl"
         />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            About <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">Me</span>
-          </h2>
-          <div className="h-1 w-20 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full"></div>
-          <p className="mt-4 text-slate-400 max-w-3xl mx-auto">
-            I am a motivated Computer Science Engineering graduate with strong problem-solving abilities 
-            and an eagerness to contribute to scalable applications. My passion lies in both frontend 
-            and backend development, specifically utilizing PHP, Laravel, and modern JavaScript frameworks.
-          </p>
+        <div className="text-center mb-12 md:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+              About <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">Me</span>
+            </h2>
+            <div className="h-1.5 w-20 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full mb-8"></div>
+            <p className="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto font-medium leading-relaxed">
+              I am a motivated Computer Science Engineering graduate with strong problem-solving abilities and an eagerness to contribute to scalable applications. My passion lies in both frontend and backend development, specifically utilizing PHP, Laravel, and modern JavaScript frameworks.
+            </p>
+          </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
           {/* Education Column */}
           <div>
-            <h3 className="flex items-center gap-3 text-xl md:text-2xl font-bold text-white mb-6 md:mb-8">
-              <span className="p-2 bg-primary/10 rounded-lg text-primary border border-primary/20"><GraduationCap size={24} /></span>
+            <h3 className="flex items-center gap-4 text-2xl font-bold text-white mb-10">
+              <span className="p-3 bg-primary/10 rounded-xl text-primary border border-primary/20 shadow-inner"><GraduationCap size={28} /></span>
               Education
             </h3>
-            <div className="space-y-8 relative border-l border-slate-800 ml-3 pl-8">
+            <div className="space-y-10 relative border-l-2 border-slate-800 ml-4 pl-8">
               {educationData.map((edu, index) => (
-                <div key={index} className="relative group">
-                  <span className="absolute -left-[39px] top-1 h-5 w-5 rounded-full border-4 border-slate-950 bg-slate-700 group-hover:bg-primary transition-colors duration-300"></span>
-                  <div className="bg-slate-800/40 p-6 rounded-xl border border-slate-700/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 backdrop-blur-sm">
-                    <h4 className="text-lg font-bold text-white">{edu.degree}</h4>
-                    <p className="text-primary font-medium mt-1">{edu.institution}</p>
-                    <div className="flex items-center gap-2 mt-3 text-sm text-slate-400">
-                      <span className="flex items-center gap-1"><Calendar size={14} /> {edu.year}</span>
+                <motion.div 
+                  key={index} 
+                  whileHover={{ x: 8 }}
+                  className="relative group"
+                >
+                  <span className="absolute -left-[41px] top-1.5 h-6 w-6 rounded-full border-4 border-slate-950 bg-slate-800 group-hover:bg-primary transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(var(--color-primary),0.5)]"></span>
+                  
+                  {/* Subtle Backlight Shadow */}
+                  <div className="absolute -inset-2 bg-primary/5 blur-xl rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                  
+                  <div className="bg-slate-900/60 p-6 rounded-xl border border-slate-800/60 group-hover:border-primary/40 transition-all duration-300 shadow-xl backdrop-blur-md relative z-10 overflow-hidden">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform"></div>
+                    <h4 className="text-xl font-bold text-white group-hover:text-primary transition-colors">{edu.degree}</h4>
+                    <p className="text-slate-300 font-bold mt-1 text-lg">{edu.institution}</p>
+                    <div className="flex items-center gap-2 mt-4 text-xs font-black text-slate-500 uppercase tracking-widest">
+                      <Calendar size={14} className="text-primary" /> {edu.year}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
 
           {/* Certifications Column */}
           <div>
-            <h3 className="flex items-center gap-3 text-xl md:text-2xl font-bold text-white mb-6 md:mb-8">
-              <span className="p-2 bg-secondary/10 rounded-lg text-secondary border border-secondary/20"><Award size={24} /></span>
+            <h3 className="flex items-center gap-4 text-2xl font-bold text-white mb-10">
+              <span className="p-3 bg-secondary/10 rounded-xl text-secondary border border-secondary/20 shadow-inner"><Award size={28} /></span>
               Certifications
             </h3>
-            <div className="grid gap-4">
+            <div className="grid gap-6">
               {certifications.map((cert, index) => (
-                <div 
+                <motion.div 
                   key={index} 
-                  className="flex items-center gap-4 bg-slate-800/40 p-5 rounded-xl border border-slate-700/50 hover:border-secondary/50 transition-all duration-300 hover:translate-x-2 hover:bg-slate-800/60 backdrop-blur-sm"
+                  whileHover={{ x: 10 }}
+                  className="group relative"
                 >
-                  <div className="h-10 w-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
-                    <Award size={20} />
+                  {/* Subtle Backlight Shadow */}
+                  <div className="absolute -inset-2 bg-secondary/5 blur-xl rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                  
+                  <div className="flex items-center gap-6 bg-slate-900/60 p-6 rounded-xl border border-slate-800/60 group-hover:border-secondary/40 transition-all duration-300 shadow-xl backdrop-blur-md relative z-10 overflow-hidden">
+                    <div className="h-14 w-14 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20 group-hover:scale-110 group-hover:bg-secondary/20 transition-all">
+                      <Award size={28} />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-white group-hover:text-secondary transition-colors">
+                        {cert.name}
+                      </h4>
+                      <p className="text-xs font-black text-slate-500 uppercase tracking-wider mt-1.5 opacity-70">Issued by {cert.issuer}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-base font-semibold text-slate-200 group-hover:text-white transition-colors">
-                      {cert.name}
-                    </h4>
-                    <p className="text-sm text-slate-500 mt-0.5">Issued by {cert.issuer}</p>
-                  </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
