@@ -18,14 +18,14 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="flex gap-6">
-            <a 
+            {/* <a 
               href="https://github.com/Runhussain" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-slate-400 hover:text-white transition-colors hover:-translate-y-1 transform duration-300 hover:text-primary"
             >
               <Github size={24} />
-            </a>
+            </a> */}
             <a 
               href="https://www.linkedin.com/in/runhussain-pasha-shaik" 
               target="_blank" 
@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
               <Linkedin size={24} />
             </a>
             <a 
-              href="mailto:skrhp01@gmail.com" 
+              href="#contact" 
               className="text-slate-400 hover:text-white transition-colors hover:-translate-y-1 transform duration-300 hover:text-accent"
             >
               <Mail size={24} />
